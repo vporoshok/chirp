@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - "1.10"
+  - "1.11"
+  - "tip"
+
+install:
+  - go get -u golang.org/x/lint/golint
+  - go get -u honnef.co/go/tools/...
+  - go get -t ./...
+
+script:
+  - golint -set_exit_status ./...
+  - staticcheck -tests ./...
+  - go test -test.v -test.race -test.cover -test.coverprofile=coverage.txt -test.covermode=atomic ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
